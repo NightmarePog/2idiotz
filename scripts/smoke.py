@@ -33,7 +33,9 @@ def wait_health(expected, timeout=120):
 
 wait_health(200)
 status, html = request('/')
-assert status == 200 and 'Think diffrent Academy' in html
+assert status == 200, f'Homepage returned HTTP {status}'
+assert 'Think different Academy' in html, 'Homepage is missing the academy name'
+assert 'Think diffrent Academy' in html, 'Homepage is missing the legacy compatibility name'
 assert request('/status')[0] == 404
 team_status, team_body = request('/api/v1/team')
 team = json.loads(team_body)

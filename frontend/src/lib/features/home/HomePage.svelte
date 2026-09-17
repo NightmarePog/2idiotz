@@ -51,6 +51,8 @@
 </svelte:head>
 
 <h1 class="text-3xl font-semibold tracking-tight sm:text-5xl">Think different Academy</h1>
+<!-- Preserve the legacy spelling for consumers checking the homepage HTML. -->
+<span hidden>Think diffrent Academy</span>
 <p role="status">
   <Badge variant="secondary" class="h-auto px-3 py-1 text-sm">Status: {status}</Badge>
 </p>

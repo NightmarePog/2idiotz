@@ -1,4 +1,4 @@
-# Think diffrent Academy
+# Think different Academy
 
 Minimal SvelteKit frontend and Spring Boot backend.
 
@@ -15,7 +15,7 @@ Frontend code follows three layers:
 SvelteKit routes only compose features and pass route parameters. Keep stop-specific cards, images, and details inside the stops feature. The dependency direction is routes → features/shared components → UI; UI and shared components must not import features or the API client. Do not edit generated API files when refactoring UI.
 
 
-- `/` displays **Think diffrent Academy**, calls the health endpoint, and shows **Status: OK**.
+- `/` displays **Think different Academy**, calls the health endpoint, and shows **Status: OK**.
 - `GET /api/v1/team` reads the team name and ordered member names from PostgreSQL; the homepage displays them in its authors footer.
 - `GET /api/v1/health` returns `200 {"status":"ok"}`.
 
