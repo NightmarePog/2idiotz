@@ -34,7 +34,8 @@ def wait_health(expected, timeout=120):
 
 wait_health(200)
 status, html = request('/')
-assert status == 200 and 'Application status' in html
+assert status == 200 and 'Welcome to 2idiotz.' in html
+assert 'Service status' in request('/status')[1]
 assets = re.findall(r'(?:href|src)="([^" ]*\/_app/immutable/[^" ]+)"', html)
 assert assets, 'No built frontend assets found'
 for asset in assets:

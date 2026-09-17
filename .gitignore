@@ -10,3 +10,6 @@ backend/build/
 .idea/
 .DS_Store
 *.log
+backend/**/build/
+frontend/playwright-report/
+frontend/test-results/

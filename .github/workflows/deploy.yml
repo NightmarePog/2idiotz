@@ -23,6 +23,35 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Check backend
+        working-directory: backend
+        run: ./gradlew --no-daemon check
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          package_json_file: frontend/package.json
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Check frontend
+        working-directory: frontend
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm lint
+          pnpm check
+          pnpm test
+          pnpm exec playwright install --with-deps chromium
+          pnpm test:e2e
       - name: Build and start stack
         run: docker compose up --build -d
       - name: Check Caddy configuration
