@@ -6,7 +6,17 @@ export const zHealthResponse = z.object({
     status: z.enum(['ok'])
 });
 
+export const zTeamResponse = z.object({
+    members: z.array(z.string().min(1)),
+    name: z.string().min(1)
+});
+
 /**
  * OK
  */
 export const zGetHealthResponse = zHealthResponse;
+
+/**
+ * OK
+ */
+export const zGetTeamResponse = zTeamResponse;

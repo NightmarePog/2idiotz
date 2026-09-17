@@ -27,6 +27,24 @@
         },
         "tags": ["health-controller"]
       }
+    },
+    "/team": {
+      "get": {
+        "operationId": "getTeam",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": ["team-controller"]
+      }
     }
   },
   "components": {
@@ -40,6 +58,23 @@
           }
         },
         "required": ["status"]
+      },
+      "TeamResponse": {
+        "type": "object",
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["members", "name"]
       }
     }
   }

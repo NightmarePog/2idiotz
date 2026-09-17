@@ -4,8 +4,8 @@ import * as z from 'zod';
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { GetHealthData, GetHealthResponses } from './types.gen';
-import { zGetHealthResponse } from './zod.gen';
+import type { GetHealthData, GetHealthResponses, GetTeamData, GetTeamResponses } from './types.gen';
+import { zGetHealthResponse, zGetTeamResponse } from './zod.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -29,5 +29,16 @@ export const getHealth = <ThrowOnError extends boolean = false>(options?: Option
     }).parseAsync(data),
     responseValidator: async (data) => await zGetHealthResponse.parseAsync(data),
     url: '/health',
+    ...options
+});
+
+export const getTeam = <ThrowOnError extends boolean = false>(options?: Options<GetTeamData, ThrowOnError>): RequestResult<GetTeamResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetTeamResponses, unknown, ThrowOnError>({
+    requestValidator: async (data) => await z.object({
+        body: z.never().optional(),
+        path: z.never().optional(),
+        query: z.never().optional()
+    }).parseAsync(data),
+    responseValidator: async (data) => await zGetTeamResponse.parseAsync(data),
+    url: '/team',
     ...options
 });

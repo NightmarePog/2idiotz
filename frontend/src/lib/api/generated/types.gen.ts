@@ -8,6 +8,11 @@ export type HealthResponse = {
     status: 'ok';
 };
 
+export type TeamResponse = {
+    members: Array<string>;
+    name: string;
+};
+
 export type GetHealthData = {
     body?: never;
     path?: never;
@@ -23,3 +28,19 @@ export type GetHealthResponses = {
 };
 
 export type GetHealthResponse = GetHealthResponses[keyof GetHealthResponses];
+
+export type GetTeamData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/team';
+};
+
+export type GetTeamResponses = {
+    /**
+     * OK
+     */
+    200: TeamResponse;
+};
+
+export type GetTeamResponse = GetTeamResponses[keyof GetTeamResponses];
