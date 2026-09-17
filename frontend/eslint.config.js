@@ -28,6 +28,23 @@ export default ts.config(
     }
   },
   {
+    files: ['src/lib/ui/**/*.{ts,js,svelte}'],
+    rules: {
+      // Primitives receive resolved URLs from callers and also support external links.
+      'svelte/no-navigation-without-resolve': 'off',
+      'no-restricted-imports': [
+        'error',
+        { patterns: ['$lib/components/*', '$lib/features/*', '$lib/api/*', '$app/*'] }
+      ]
+    }
+  },
+  {
+    files: ['src/lib/components/**/*.{ts,js,svelte}'],
+    rules: {
+      'no-restricted-imports': ['error', { patterns: ['$lib/features/*', '$lib/api/*'] }]
+    }
+  },
+  {
     files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
     languageOptions: { parserOptions: { parser: ts.parser, svelteConfig } }
   }

@@ -1,12 +1,19 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI definition",
-    "version": "v0"
+    "description": "API for managing public transport stops in Think different Academy.",
+    "title": "Think different Transit API",
+    "version": "1.0.0"
   },
   "servers": [
     {
       "url": "/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "description": "Stop management",
+      "name": "Stops"
     }
   ],
   "paths": {
@@ -26,6 +33,147 @@
           }
         },
         "tags": ["health-controller"]
+      }
+    },
+    "/stops": {
+      "get": {
+        "operationId": "getStops",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Stop"
+                  }
+                }
+              }
+            },
+            "description": "List of stops"
+          }
+        },
+        "summary": "List all stops",
+        "tags": ["Stops"]
+      },
+      "post": {
+        "operationId": "createStop",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StopInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Stop"
+                }
+              }
+            },
+            "description": "Stop created successfully"
+          }
+        },
+        "summary": "Create a new stop",
+        "tags": ["Stops"]
+      }
+    },
+    "/stops/{id}": {
+      "delete": {
+        "operationId": "deleteStop",
+        "parameters": [
+          {
+            "description": "Stop ID",
+            "example": 12,
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Stop deleted successfully"
+          }
+        },
+        "summary": "Delete a stop",
+        "tags": ["Stops"]
+      },
+      "get": {
+        "operationId": "getStop",
+        "parameters": [
+          {
+            "description": "Stop ID",
+            "example": 12,
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Stop"
+                }
+              }
+            },
+            "description": "Stop detail"
+          }
+        },
+        "summary": "Get stop detail",
+        "tags": ["Stops"]
+      },
+      "put": {
+        "operationId": "updateStop",
+        "parameters": [
+          {
+            "description": "Stop ID",
+            "example": 12,
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StopInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Stop"
+                }
+              }
+            },
+            "description": "Stop updated successfully"
+          }
+        },
+        "summary": "Update a stop",
+        "tags": ["Stops"]
       }
     },
     "/team": {
@@ -58,6 +206,64 @@
           }
         },
         "required": ["status"]
+      },
+      "Stop": {
+        "type": "object",
+        "properties": {
+          "has_shelter": {
+            "type": "boolean"
+          },
+          "has_ticket_machine": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "readOnly": true
+          },
+          "image_url": {
+            "type": ["string", "null"]
+          },
+          "name": {
+            "type": "string"
+          },
+          "wheelchair_accessible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "has_shelter",
+          "has_ticket_machine",
+          "id",
+          "image_url",
+          "name",
+          "wheelchair_accessible"
+        ]
+      },
+      "StopInput": {
+        "type": "object",
+        "properties": {
+          "has_shelter": {
+            "type": "boolean"
+          },
+          "has_ticket_machine": {
+            "type": "boolean"
+          },
+          "image_url": {
+            "type": ["string", "null"],
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          },
+          "wheelchair_accessible": {
+            "type": "boolean"
+          }
+        },
+        "required": ["has_shelter", "has_ticket_machine", "name", "wheelchair_accessible"]
       },
       "TeamResponse": {
         "type": "object",

@@ -4,6 +4,7 @@ spotless = "7.0.4"
 springdoc = "3.1.1"
 
 [libraries]
+commons-csv = { module = "org.apache.commons:commons-csv", version = "1.14.1" }
 lombok = { module = "org.projectlombok:lombok" }
 spring-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
 spring-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway" }

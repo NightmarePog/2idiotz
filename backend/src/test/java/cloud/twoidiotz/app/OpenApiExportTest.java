@@ -8,6 +8,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,6 +61,43 @@ class OpenApiExportTest {
             HttpResponse.BodyHandlers.ofString());
     assertEquals(200, team.statusCode());
     assertFalse(mapper.readTree(team.body()).get("members").isEmpty());
+    assertEquals("3.1.0", contract.get("openapi").asString());
+    assertEquals("getStops", contract.at("/paths/~1stops/get/operationId").asString());
+    assertEquals("createStop", contract.at("/paths/~1stops/post/operationId").asString());
+    assertEquals("getStop", contract.at("/paths/~1stops~1{id}/get/operationId").asString());
+    assertEquals("updateStop", contract.at("/paths/~1stops~1{id}/put/operationId").asString());
+    assertEquals("deleteStop", contract.at("/paths/~1stops~1{id}/delete/operationId").asString());
+    assertTrue(contract.at("/paths/~1stops/post/responses").has("201"));
+    assertTrue(contract.at("/paths/~1stops~1{id}/delete/responses").has("204"));
+    var stopSchema = contract.at("/components/schemas/Stop");
+    assertEquals("int64", stopSchema.at("/properties/id/format").asString());
+    assertTrue(stopSchema.at("/properties/id/readOnly").asBoolean());
+    assertEquals(
+        Set.of(
+            "id",
+            "name",
+            "image_url",
+            "wheelchair_accessible",
+            "has_shelter",
+            "has_ticket_machine"),
+        stopSchema
+            .get("required")
+            .valueStream()
+            .map(node -> node.asString())
+            .collect(Collectors.toSet()));
+    for (var schemaName : new String[] {"Stop", "StopInput"}) {
+      var properties = contract.at("/components/schemas/" + schemaName + "/properties");
+      assertTrue(properties.has("image_url"));
+      assertTrue(properties.has("wheelchair_accessible"));
+      assertFalse(properties.has("imageUrl"));
+      assertFalse(properties.get("image_url").has("pattern"));
+    }
+    var stops =
+        client.send(
+            HttpRequest.newBuilder(URI.create(origin + "/stops")).build(),
+            HttpResponse.BodyHandlers.ofString());
+    assertEquals(200, stops.statusCode());
+    assertTrue(mapper.readTree(stops.body()).isArray());
     var output = Path.of(System.getProperty("openapi.output"));
     Files.createDirectories(output);
     Files.writeString(
@@ -66,5 +105,6 @@ class OpenApiExportTest {
         mapper.writerWithDefaultPrettyPrinter().writeValueAsString(contract) + "\n");
     Files.writeString(output.resolve("health.json"), health.body());
     Files.writeString(output.resolve("team.json"), team.body());
+    Files.writeString(output.resolve("stops.json"), stops.body());
   }
 }

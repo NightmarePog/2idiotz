@@ -8,9 +8,34 @@ export type HealthResponse = {
     status: 'ok';
 };
 
+export type Stop = {
+    has_shelter: boolean;
+    has_ticket_machine: boolean;
+    readonly id: number;
+    image_url: string | null;
+    name: string;
+    wheelchair_accessible: boolean;
+};
+
+export type StopInput = {
+    has_shelter: boolean;
+    has_ticket_machine: boolean;
+    image_url?: string | null;
+    name: string;
+    wheelchair_accessible: boolean;
+};
+
 export type TeamResponse = {
     members: Array<string>;
     name: string;
+};
+
+export type StopWritable = {
+    has_shelter: boolean;
+    has_ticket_machine: boolean;
+    image_url: string | null;
+    name: string;
+    wheelchair_accessible: boolean;
 };
 
 export type GetHealthData = {
@@ -28,6 +53,101 @@ export type GetHealthResponses = {
 };
 
 export type GetHealthResponse = GetHealthResponses[keyof GetHealthResponses];
+
+export type GetStopsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/stops';
+};
+
+export type GetStopsResponses = {
+    /**
+     * List of stops
+     */
+    200: Array<Stop>;
+};
+
+export type GetStopsResponse = GetStopsResponses[keyof GetStopsResponses];
+
+export type CreateStopData = {
+    body: StopInput;
+    path?: never;
+    query?: never;
+    url: '/stops';
+};
+
+export type CreateStopResponses = {
+    /**
+     * Stop created successfully
+     */
+    201: Stop;
+};
+
+export type CreateStopResponse = CreateStopResponses[keyof CreateStopResponses];
+
+export type DeleteStopData = {
+    body?: never;
+    path: {
+        /**
+         * Stop ID
+         */
+        id: number;
+    };
+    query?: never;
+    url: '/stops/{id}';
+};
+
+export type DeleteStopResponses = {
+    /**
+     * Stop deleted successfully
+     */
+    204: void;
+};
+
+export type DeleteStopResponse = DeleteStopResponses[keyof DeleteStopResponses];
+
+export type GetStopData = {
+    body?: never;
+    path: {
+        /**
+         * Stop ID
+         */
+        id: number;
+    };
+    query?: never;
+    url: '/stops/{id}';
+};
+
+export type GetStopResponses = {
+    /**
+     * Stop detail
+     */
+    200: Stop;
+};
+
+export type GetStopResponse = GetStopResponses[keyof GetStopResponses];
+
+export type UpdateStopData = {
+    body: StopInput;
+    path: {
+        /**
+         * Stop ID
+         */
+        id: number;
+    };
+    query?: never;
+    url: '/stops/{id}';
+};
+
+export type UpdateStopResponses = {
+    /**
+     * Stop updated successfully
+     */
+    200: Stop;
+};
+
+export type UpdateStopResponse = UpdateStopResponses[keyof UpdateStopResponses];
 
 export type GetTeamData = {
     body?: never;

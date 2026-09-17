@@ -12,7 +12,13 @@ spring:
     hibernate:
       ddl-auto: validate
   flyway:
+    locations: classpath:db/migration,classpath:seed
     connect-retries: 30
+  mvc:
+    static-path-pattern: /stops-images/**
+  web:
+    resources:
+      static-locations: classpath:/seed/stopsImages/
   application:
     name: 2idiotz
 

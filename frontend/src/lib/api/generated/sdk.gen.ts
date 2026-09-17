@@ -4,8 +4,8 @@ import * as z from 'zod';
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { GetHealthData, GetHealthResponses, GetTeamData, GetTeamResponses } from './types.gen';
-import { zGetHealthResponse, zGetTeamResponse } from './zod.gen';
+import type { CreateStopData, CreateStopResponses, DeleteStopData, DeleteStopResponses, GetHealthData, GetHealthResponses, GetStopData, GetStopResponses, GetStopsData, GetStopsResponses, GetTeamData, GetTeamResponses, UpdateStopData, UpdateStopResponses } from './types.gen';
+import { zCreateStopBody, zCreateStopResponse, zDeleteStopPath, zDeleteStopResponse, zGetHealthResponse, zGetStopPath, zGetStopResponse, zGetStopsResponse, zGetTeamResponse, zUpdateStopBody, zUpdateStopPath, zUpdateStopResponse } from './zod.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -30,6 +30,84 @@ export const getHealth = <ThrowOnError extends boolean = false>(options?: Option
     responseValidator: async (data) => await zGetHealthResponse.parseAsync(data),
     url: '/health',
     ...options
+});
+
+/**
+ * List all stops
+ */
+export const getStops = <ThrowOnError extends boolean = false>(options?: Options<GetStopsData, ThrowOnError>): RequestResult<GetStopsResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetStopsResponses, unknown, ThrowOnError>({
+    requestValidator: async (data) => await z.object({
+        body: z.never().optional(),
+        path: z.never().optional(),
+        query: z.never().optional()
+    }).parseAsync(data),
+    responseValidator: async (data) => await zGetStopsResponse.parseAsync(data),
+    url: '/stops',
+    ...options
+});
+
+/**
+ * Create a new stop
+ */
+export const createStop = <ThrowOnError extends boolean = false>(options: Options<CreateStopData, ThrowOnError>): RequestResult<CreateStopResponses, unknown, ThrowOnError> => (options.client ?? client).post<CreateStopResponses, unknown, ThrowOnError>({
+    requestValidator: async (data) => await z.object({
+        body: zCreateStopBody,
+        path: z.never().optional(),
+        query: z.never().optional()
+    }).parseAsync(data),
+    responseValidator: async (data) => await zCreateStopResponse.parseAsync(data),
+    url: '/stops',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete a stop
+ */
+export const deleteStop = <ThrowOnError extends boolean = false>(options: Options<DeleteStopData, ThrowOnError>): RequestResult<DeleteStopResponses, unknown, ThrowOnError> => (options.client ?? client).delete<DeleteStopResponses, unknown, ThrowOnError>({
+    requestValidator: async (data) => await z.object({
+        body: z.never().optional(),
+        path: zDeleteStopPath,
+        query: z.never().optional()
+    }).parseAsync(data),
+    responseValidator: async (data) => await zDeleteStopResponse.parseAsync(data),
+    url: '/stops/{id}',
+    ...options
+});
+
+/**
+ * Get stop detail
+ */
+export const getStop = <ThrowOnError extends boolean = false>(options: Options<GetStopData, ThrowOnError>): RequestResult<GetStopResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetStopResponses, unknown, ThrowOnError>({
+    requestValidator: async (data) => await z.object({
+        body: z.never().optional(),
+        path: zGetStopPath,
+        query: z.never().optional()
+    }).parseAsync(data),
+    responseValidator: async (data) => await zGetStopResponse.parseAsync(data),
+    url: '/stops/{id}',
+    ...options
+});
+
+/**
+ * Update a stop
+ */
+export const updateStop = <ThrowOnError extends boolean = false>(options: Options<UpdateStopData, ThrowOnError>): RequestResult<UpdateStopResponses, unknown, ThrowOnError> => (options.client ?? client).put<UpdateStopResponses, unknown, ThrowOnError>({
+    requestValidator: async (data) => await z.object({
+        body: zUpdateStopBody,
+        path: zUpdateStopPath,
+        query: z.never().optional()
+    }).parseAsync(data),
+    responseValidator: async (data) => await zUpdateStopResponse.parseAsync(data),
+    url: '/stops/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
 });
 
 export const getTeam = <ThrowOnError extends boolean = false>(options?: Options<GetTeamData, ThrowOnError>): RequestResult<GetTeamResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetTeamResponses, unknown, ThrowOnError>({

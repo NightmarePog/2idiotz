@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
 test('homepage fetches health and displays OK', async ({ page }) => {
   await page.route('**/api/v1/health', (route) => route.fulfill({ json: { status: 'ok' } }));
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Think diffrent Academy');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Think different Academy');
   await expect(page.getByRole('status')).toHaveText('Status: OK');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });

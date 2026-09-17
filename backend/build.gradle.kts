@@ -27,6 +27,7 @@ spotless {
 }
 
 dependencies {
+  testImplementation(libs.commons.csv)
   implementation(platform(libs.spring.boot.bom))
   compileOnly(libs.lombok)
   annotationProcessor(platform(libs.spring.boot.bom))
@@ -34,7 +35,7 @@ dependencies {
   implementation(libs.spring.jpa)
   implementation(libs.spring.flyway)
   runtimeOnly(libs.flyway.postgresql)
-  runtimeOnly(libs.postgresql)
+  implementation(libs.postgresql)
   implementation(libs.spring.web)
   implementation(libs.spring.validation)
   implementation(libs.springdoc)

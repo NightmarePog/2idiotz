@@ -6,15 +6,81 @@ export const zHealthResponse = z.object({
     status: z.enum(['ok'])
 });
 
+export const zStop = z.object({
+    has_shelter: z.boolean(),
+    has_ticket_machine: z.boolean(),
+    id: z.int().readonly(),
+    image_url: z.string().nullable(),
+    name: z.string(),
+    wheelchair_accessible: z.boolean()
+});
+
+export const zStopInput = z.object({
+    has_shelter: z.boolean(),
+    has_ticket_machine: z.boolean(),
+    image_url: z.string().min(0).max(255).nullish(),
+    name: z.string().min(0).max(255),
+    wheelchair_accessible: z.boolean()
+});
+
 export const zTeamResponse = z.object({
     members: z.array(z.string().min(1)),
     name: z.string().min(1)
+});
+
+export const zStopWritable = z.object({
+    has_shelter: z.boolean(),
+    has_ticket_machine: z.boolean(),
+    image_url: z.string().nullable(),
+    name: z.string(),
+    wheelchair_accessible: z.boolean()
 });
 
 /**
  * OK
  */
 export const zGetHealthResponse = zHealthResponse;
+
+/**
+ * List of stops
+ */
+export const zGetStopsResponse = z.array(zStop);
+
+export const zCreateStopBody = zStopInput;
+
+/**
+ * Stop created successfully
+ */
+export const zCreateStopResponse = zStop;
+
+export const zDeleteStopPath = z.object({
+    id: z.int()
+});
+
+/**
+ * Stop deleted successfully
+ */
+export const zDeleteStopResponse = z.void();
+
+export const zGetStopPath = z.object({
+    id: z.int()
+});
+
+/**
+ * Stop detail
+ */
+export const zGetStopResponse = zStop;
+
+export const zUpdateStopBody = zStopInput;
+
+export const zUpdateStopPath = z.object({
+    id: z.int()
+});
+
+/**
+ * Stop updated successfully
+ */
+export const zUpdateStopResponse = zStop;
 
 /**
  * OK
