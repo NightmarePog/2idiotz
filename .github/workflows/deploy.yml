@@ -1,9 +1,9 @@
 name: Check and upload to Tour de Cloud
 
 on:
-  push:
-    branches: [main]
   pull_request:
+    branches: [main]
+  push:
     branches: [main]
   workflow_dispatch:
 
@@ -18,11 +18,11 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    env:
-      POSTGRES_PASSWORD: ci-disposable-password
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - name: Set up Java
         uses: actions/setup-java@v5
         with:
@@ -47,16 +47,33 @@ jobs:
         working-directory: frontend
         run: |
           pnpm install --frozen-lockfile
+          pnpm api:check
+          pnpm test:api
           pnpm lint
           pnpm check
-          pnpm test
           pnpm exec playwright install --with-deps chromium
           pnpm test:e2e
+      - name: Reject breaking API changes
+        env:
+          CONTRACT_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [ -z "$CONTRACT_BASE" ] || [ "$CONTRACT_BASE" = "0000000000000000000000000000000000000000" ]; then
+            CONTRACT_BASE=$(git rev-parse HEAD^)
+          fi
+          git cat-file -e "$CONTRACT_BASE^{commit}"
+          if git cat-file -e "$CONTRACT_BASE:frontend/openapi.json" 2>/dev/null; then
+            git show "$CONTRACT_BASE:frontend/openapi.json" > backend/build/openapi/base.json
+            docker run --rm -v "$PWD:/specs:ro" tufin/oasdiff:v1.32.1 \
+              breaking --fail-on WARN \
+              /specs/backend/build/openapi/base.json /specs/frontend/openapi.json
+          else
+            echo 'No previous OpenAPI contract; this change establishes the baseline.'
+          fi
       - name: Build and start stack
         run: docker compose up --build -d
       - name: Check Caddy configuration
         run: docker compose exec -T caddy caddy validate --config /etc/caddy/Caddyfile
-      - name: Test application and database recovery
+      - name: Test application
         run: python3 scripts/smoke.py
       - name: Show container logs on failure
         if: failure()
@@ -76,13 +93,9 @@ jobs:
       - name: Check deployment settings
         env:
           TDC_TOKEN: ${{ secrets.TDC_TOKEN }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
           test -n "$TDC_TOKEN" || { echo 'Add repository secret TDC_TOKEN.'; exit 1; }
-          test -n "$POSTGRES_PASSWORD" || { echo 'Add repository secret POSTGRES_PASSWORD.'; exit 1; }
       - name: Upload to Tour de Cloud
         uses: studentscangrow/upload-app@v27
-        env:
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         with:
           tdc_token: ${{ secrets.TDC_TOKEN }}
