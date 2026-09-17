@@ -24,7 +24,8 @@ services:
   web:
     build: ./frontend
     environment:
-      ORIGIN: http://localhost:8080
+      PROTOCOL_HEADER: x-forwarded-proto
+      HOST_HEADER: x-forwarded-host
   caddy:
     build: ./caddy
     ports:

@@ -77,22 +77,12 @@ jobs:
         env:
           TDC_TOKEN: ${{ secrets.TDC_TOKEN }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          APP_ORIGIN: ${{ vars.APP_ORIGIN }}
         run: |
           test -n "$TDC_TOKEN" || { echo 'Add repository secret TDC_TOKEN.'; exit 1; }
           test -n "$POSTGRES_PASSWORD" || { echo 'Add repository secret POSTGRES_PASSWORD.'; exit 1; }
-          python3 - <<'PY'
-          import os
-          from urllib.parse import urlsplit
-          origin = os.environ['APP_ORIGIN']
-          parsed = urlsplit(origin)
-          if parsed.scheme != 'https' or not parsed.hostname or parsed.path or parsed.query or parsed.fragment or parsed.username or parsed.password:
-              raise SystemExit('Set repository variable APP_ORIGIN to your public HTTPS origin without a trailing slash.')
-          PY
       - name: Upload to Tour de Cloud
         uses: studentscangrow/upload-app@v27
         env:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          APP_ORIGIN: ${{ vars.APP_ORIGIN }}
         with:
           tdc_token: ${{ secrets.TDC_TOKEN }}

@@ -5,6 +5,9 @@
 		reverse_proxy {$API_UPSTREAM:localhost:8080}
 	}
 	handle {
-		reverse_proxy {$WEB_UPSTREAM:localhost:3001}
+		reverse_proxy {$WEB_UPSTREAM:localhost:3001} {
+			# Tour de Cloud terminates HTTPS before forwarding traffic to this pod.
+			header_up X-Forwarded-Proto {$PUBLIC_SCHEME:http}
+		}
 	}
 }

@@ -111,11 +111,12 @@ In repository **Settings → Secrets and variables → Actions**, configure:
 | --- | --- | --- |
 | Secret | `TDC_TOKEN` | Token from Tour de Cloud’s **Přístupové klíče**; enter it directly in GitHub |
 | Secret | `POSTGRES_PASSWORD` | Database password; already generated for this repository |
-| Variable | `APP_ORIGIN` | Public HTTPS application origin, without a trailing slash |
 
 Push to `main` or manually run **Check and upload to Tour de Cloud**. Pull requests run checks without uploading. CI runs backend checks with Testcontainers, frontend checks and Playwright, then production-image smoke tests before upload. Docker image builds do not need Docker-in-Docker.
 
 After a successful upload, open **Verze** in Tour de Cloud, select the uploaded commit, and click **Nasadit**. Uploading alone does not deploy it.
+
+No public URL variable is required. SvelteKit derives the public origin from Caddy’s forwarded host and protocol headers. Caddy sets the protocol to HTTPS on Tour de Cloud and HTTP in local Compose, overriding client-supplied protocol headers.
 
 Caddy is the only public container, on port 80. It forwards `/api` and `/api/*` to Spring Boot and everything else to SvelteKit. Containers communicate through `localhost` in Tour de Cloud and service names in local Compose. Credentials are runtime configuration, never frontend data or Docker build arguments.
 
