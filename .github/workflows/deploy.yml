@@ -1,0 +1,69 @@
+name: Check and upload to Tour de Cloud
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tourdecloud-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      POSTGRES_PASSWORD: ci-disposable-password
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Build and start stack
+        run: docker compose up --build -d
+      - name: Check Caddy configuration
+        run: docker compose exec -T caddy caddy validate --config /etc/caddy/Caddyfile
+      - name: Test application and database recovery
+        run: python3 scripts/smoke.py
+      - name: Show container logs on failure
+        if: failure()
+        run: docker compose logs --no-color --tail=100
+      - name: Stop stack
+        if: always()
+        run: docker compose down -v
+
+  upload:
+    needs: checks
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Check deployment settings
+        env:
+          TDC_TOKEN: ${{ secrets.TDC_TOKEN }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          APP_ORIGIN: ${{ vars.APP_ORIGIN }}
+        run: |
+          test -n "$TDC_TOKEN" || { echo 'Add repository secret TDC_TOKEN.'; exit 1; }
+          test -n "$POSTGRES_PASSWORD" || { echo 'Add repository secret POSTGRES_PASSWORD.'; exit 1; }
+          python3 - <<'PY'
+          import os
+          from urllib.parse import urlsplit
+          origin = os.environ['APP_ORIGIN']
+          parsed = urlsplit(origin)
+          if parsed.scheme != 'https' or not parsed.hostname or parsed.path or parsed.query or parsed.fragment or parsed.username or parsed.password:
+              raise SystemExit('Set repository variable APP_ORIGIN to your public HTTPS origin without a trailing slash.')
+          PY
+      - name: Upload to Tour de Cloud
+        uses: studentscangrow/upload-app@v27
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          APP_ORIGIN: ${{ vars.APP_ORIGIN }}
+        with:
+          tdc_token: ${{ secrets.TDC_TOKEN }}

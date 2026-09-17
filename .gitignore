@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+node_modules/
+.svelte-kit/
+frontend/build/
+backend/target/
+backend/build/
+.gradle/
+.idea/
+.DS_Store
+*.log

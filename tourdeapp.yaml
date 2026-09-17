@@ -1,0 +1,39 @@
+# $schema: https://tourde.cloud/api/v2/schema
+exposedPort: 80
+containers:
+  - name: web
+    image: registry.tourde.cloud/app_build_repl_idiot/web
+    port: 3001
+    env:
+      HOST: "0.0.0.0"
+      PORT: "3001"
+      ORIGIN: "{{APP_ORIGIN}}"
+  - name: server
+    image: registry.tourde.cloud/app_build_repl_idiot/server
+    port: 8080
+    env:
+      PORT: "8080"
+      DATABASE_URL: jdbc:postgresql://localhost:5432/app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: "{{POSTGRES_PASSWORD}}"
+  - name: postgres
+    image: postgres
+    tag: "17-alpine"
+    port: 5432
+    env:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: "{{POSTGRES_PASSWORD}}"
+  - name: caddy
+    image: registry.tourde.cloud/app_build_repl_idiot/caddy
+    port: 80
+build:
+  - name: web
+    context: ./frontend
+    dockerfile: ./frontend/Dockerfile
+  - name: server
+    context: ./backend
+    dockerfile: ./backend/Dockerfile
+  - name: caddy
+    context: ./caddy
+    dockerfile: ./caddy/Dockerfile
