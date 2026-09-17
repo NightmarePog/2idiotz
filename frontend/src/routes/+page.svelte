@@ -24,6 +24,7 @@
   <Button href={resolve('/status')} class="mt-8 min-h-11"
     >View service status <ArrowUpRight class="size-4" aria-hidden="true" /></Button
   >
+  <p>Think different Academy</p>
 </section>
 <Card.Root class="mt-14 max-w-2xl shadow-none">
   <Card.Header>
