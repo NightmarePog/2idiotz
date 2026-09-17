@@ -4,12 +4,10 @@
 node_modules/
 .svelte-kit/
 frontend/build/
-backend/target/
 backend/build/
 .gradle/
 .idea/
 .DS_Store
 *.log
-backend/**/build/
 frontend/playwright-report/
 frontend/test-results/

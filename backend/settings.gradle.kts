@@ -1,5 +1,4 @@
 pluginManagement {
-  includeBuild("build-logic")
   repositories {
     gradlePluginPortal()
     mavenCentral()
@@ -12,4 +11,3 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "2idiotz-backend"
-include("app", "domain", "infrastructure")

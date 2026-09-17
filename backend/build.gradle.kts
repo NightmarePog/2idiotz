@@ -1,5 +1,49 @@
-plugins { base }
+plugins {
+  java
+  alias(libs.plugins.spotless)
+  alias(libs.plugins.spring.boot)
+}
 
-tasks.named("check") {
-  dependsOn(":app:check", ":domain:check", ":infrastructure:check")
+group = "cloud.twoidiotz"
+
+version = "0.0.1-SNAPSHOT"
+
+java { toolchain { languageVersion.set(JavaLanguageVersion.of(21)) } }
+
+tasks.test { useJUnitPlatform { excludeTags("openapi") } }
+
+spotless {
+  java {
+    googleJavaFormat("1.25.2")
+    removeUnusedImports()
+    trimTrailingWhitespace()
+    endWithNewline()
+  }
+  kotlinGradle {
+    ktfmt("0.54")
+    trimTrailingWhitespace()
+    endWithNewline()
+  }
+}
+
+dependencies {
+  implementation(platform(libs.spring.boot.bom))
+  implementation(libs.spring.web)
+  implementation(libs.spring.validation)
+  implementation(libs.springdoc)
+  testImplementation(libs.spring.test)
+  testRuntimeOnly(libs.junit.launcher)
+}
+
+tasks.bootJar { archiveFileName.set("app.jar") }
+
+tasks.register<Test>("exportOpenApi") {
+  description = "Exports the OpenAPI contract and a live health response from this checkout."
+  group = "verification"
+  testClassesDirs = sourceSets.test.get().output.classesDirs
+  classpath = sourceSets.test.get().runtimeClasspath
+  useJUnitPlatform { includeTags("openapi") }
+  val output = layout.buildDirectory.dir("openapi")
+  systemProperty("openapi.output", output.get().asFile.absolutePath)
+  outputs.dir(output)
 }

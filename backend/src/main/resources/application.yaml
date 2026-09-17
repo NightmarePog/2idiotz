@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: 2idiotz
+
+server:
+  port: ${PORT:8080}
+  servlet:
+    context-path: /api/v1
+  shutdown: graceful
+
+springdoc:
+  api-docs:
+    enabled: false
