@@ -18,6 +18,20 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      POSTGRES_PASSWORD: ci-disposable-password
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: app_test
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: ci-disposable-password
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U app -d app_test"
+          --health-interval 3s --health-timeout 3s --health-retries 20
     steps:
       - name: Check out repository
         uses: actions/checkout@v7
@@ -93,9 +107,13 @@ jobs:
       - name: Check deployment settings
         env:
           TDC_TOKEN: ${{ secrets.TDC_TOKEN }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: |
+          test -n "$POSTGRES_PASSWORD" || { echo 'Add repository secret POSTGRES_PASSWORD.'; exit 1; }
           test -n "$TDC_TOKEN" || { echo 'Add repository secret TDC_TOKEN.'; exit 1; }
       - name: Upload to Tour de Cloud
         uses: studentscangrow/upload-app@v27
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         with:
           tdc_token: ${{ secrets.TDC_TOKEN }}

@@ -35,6 +35,10 @@ wait_health(200)
 status, html = request('/')
 assert status == 200 and 'Think diffrent Academy' in html
 assert request('/status')[0] == 404
+team_status, team_body = request('/api/v1/team')
+team = json.loads(team_body)
+assert team_status == 200 and team['name'] and team['members']
+assert all(isinstance(name, str) and name.strip() for name in team['members'])
 assets = re.findall(r'(?:href|src)="([^" ]*\/_app/immutable/[^" ]+)"', html)
 assert assets, 'No built frontend assets found'
 for asset in assets:
