@@ -28,6 +28,13 @@ spotless {
 
 dependencies {
   implementation(platform(libs.spring.boot.bom))
+  compileOnly(libs.lombok)
+  annotationProcessor(platform(libs.spring.boot.bom))
+  annotationProcessor(libs.lombok)
+  implementation(libs.spring.jpa)
+  implementation(libs.spring.flyway)
+  runtimeOnly(libs.flyway.postgresql)
+  runtimeOnly(libs.postgresql)
   implementation(libs.spring.web)
   implementation(libs.spring.validation)
   implementation(libs.springdoc)

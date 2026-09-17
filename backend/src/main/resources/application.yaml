@@ -1,4 +1,18 @@
 spring:
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/app}
+    username: ${POSTGRES_USER:app}
+    password: ${POSTGRES_PASSWORD}
+    hikari:
+      initialization-fail-timeout: 60000
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate.mapping.default_list_semantics: LIST
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    connect-retries: 30
   application:
     name: 2idiotz
 

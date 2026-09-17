@@ -14,6 +14,17 @@ containers:
     port: 8080
     env:
       PORT: "8080"
+      DATABASE_URL: jdbc:postgresql://localhost:5432/app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: "{{POSTGRES_PASSWORD}}"
+  - name: postgres
+    image: postgres
+    tag: "17-alpine"
+    port: 5432
+    env:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: "{{POSTGRES_PASSWORD}}"
   - name: caddy
     image: registry.tourde.cloud/app_build_repl_idiot/caddy
     port: 80

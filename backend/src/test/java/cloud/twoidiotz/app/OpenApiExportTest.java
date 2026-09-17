@@ -13,10 +13,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ObjectNode;
 
 @Tag("openapi")
+@ActiveProfiles("test")
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {"springdoc.api-docs.enabled=true", "springdoc.writer-with-order-by-keys=true"})
@@ -50,11 +52,19 @@ class OpenApiExportTest {
             HttpRequest.newBuilder(URI.create(origin + "/health")).build(),
             HttpResponse.BodyHandlers.ofString());
     assertEquals(200, health.statusCode());
+    assertEquals("getTeam", contract.at("/paths/~1team/get/operationId").asString());
+    var team =
+        client.send(
+            HttpRequest.newBuilder(URI.create(origin + "/team")).build(),
+            HttpResponse.BodyHandlers.ofString());
+    assertEquals(200, team.statusCode());
+    assertFalse(mapper.readTree(team.body()).get("members").isEmpty());
     var output = Path.of(System.getProperty("openapi.output"));
     Files.createDirectories(output);
     Files.writeString(
         output.resolve("openapi.json"),
         mapper.writerWithDefaultPrettyPrinter().writeValueAsString(contract) + "\n");
     Files.writeString(output.resolve("health.json"), health.body());
+    Files.writeString(output.resolve("team.json"), team.body());
   }
 }

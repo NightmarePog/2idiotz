@@ -18,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Operation
 public @interface ApiGet {
   @AliasFor(annotation = RequestMapping.class, attribute = "path")
+  String[] value() default {};
+
+  @AliasFor(annotation = RequestMapping.class, attribute = "path")
   String[] path() default {};
 
   @AliasFor(annotation = Operation.class, attribute = "operationId")
-  String operationId();
+  String operationId() default "";
 }

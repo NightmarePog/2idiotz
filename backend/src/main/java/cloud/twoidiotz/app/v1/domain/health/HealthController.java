@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HealthController {
-  @ApiGet(path = "/health", operationId = "getHealth")
-  public ResponseEntity<HealthResponse> health() {
+  @ApiGet("/health")
+  public ResponseEntity<HealthResponse> getHealth() {
     return ResponseEntity.ok()
         .cacheControl(CacheControl.noStore())
         .body(new HealthResponse(HealthResponse.Status.OK));
