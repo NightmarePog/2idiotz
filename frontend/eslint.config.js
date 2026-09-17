@@ -5,18 +5,30 @@ import globals from 'globals';
 import svelteConfig from './svelte.config.js';
 
 export default ts.config(
-  { ignores: ['build/**', '.svelte-kit/**', 'playwright-report/**', 'test-results/**'] },
+  {
+    ignores: [
+      'build/**',
+      '.svelte-kit/**',
+      'playwright-report/**',
+      'test-results/**',
+      'src/lib/api/generated/**'
+    ]
+  },
   js.configs.recommended,
   ...ts.configs.recommended,
   ...svelte.configs['flat/recommended'],
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
   {
+    files: ['src/**/*.{ts,js,svelte}'],
+    rules: {
+      'no-restricted-globals': [
+        'error',
+        { name: 'fetch', message: 'Use the generated API SDK for backend requests.' }
+      ]
+    }
+  },
+  {
     files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
     languageOptions: { parserOptions: { parser: ts.parser, svelteConfig } }
-  },
-  // Generic links accept external URLs; route callers resolve internal paths.
-  {
-    files: ['src/lib/components/ui/button/button.svelte'],
-    rules: { 'svelte/no-navigation-without-resolve': 'off' }
   }
 );
