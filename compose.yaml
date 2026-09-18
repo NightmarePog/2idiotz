@@ -35,6 +35,7 @@ services:
     environment:
       API_UPSTREAM: server:8080
       WEB_UPSTREAM: web:3001
+      PUBLIC_PORT: "8080"
     depends_on:
       - web
       - server

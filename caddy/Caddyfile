@@ -4,6 +4,7 @@
 	handle @api {
 		reverse_proxy {$API_UPSTREAM:localhost:8080} {
 			header_up X-Forwarded-Proto {$PUBLIC_SCHEME:http}
+			header_up X-Forwarded-Port {$PUBLIC_PORT:80}
 		}
 	}
 	handle {

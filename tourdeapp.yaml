@@ -30,6 +30,7 @@ containers:
     port: 80
     env:
       PUBLIC_SCHEME: https
+      PUBLIC_PORT: "443"
 build:
   - name: web
     context: ./frontend

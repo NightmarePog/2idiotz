@@ -204,17 +204,41 @@ class StopApiIntegrationTest {
 
   @Test
   void seededImageUrlsUseThePublicProxyOrigin() throws Exception {
+    assertSeededImageUrls("https", "transit.example.com:80", "443", "https://transit.example.com");
+  }
+
+  @Test
+  void seededImageUrlsPreserveTheLocalDockerPort() throws Exception {
+    assertSeededImageUrls("http", "localhost:8080", "8080", "http://localhost:8080");
+  }
+
+  private void assertSeededImageUrls(String scheme, String host, String publicPort, String origin)
+      throws Exception {
     var response =
         HttpClient.newHttpClient()
             .send(
                 HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/api/v1/stops"))
-                    .header("X-Forwarded-Proto", "https")
-                    .header("X-Forwarded-Host", "transit.example.com")
+                    .header("X-Forwarded-Proto", scheme)
+                    .header("X-Forwarded-Host", host)
+                    .header("X-Forwarded-Port", publicPort)
                     .build(),
                 HttpResponse.BodyHandlers.ofString());
     assertEquals(200, response.statusCode());
-    var image = mapper.readTree(response.body()).get(0).get("image_url").asString();
-    assertTrue(image.startsWith("https://transit.example.com/api/v1/stops-images/"), image);
+    var stops = mapper.readTree(response.body());
+    assertEquals(
+        origin + "/api/v1/stops-images/turingTerminal.png",
+        stops.get(0).get("image_url").asString());
+    var quantum = stations.findById(15L).orElseThrow();
+    assertEquals("Quantum Commons", quantum.getName());
+    for (var stop : stops) {
+      if (stop.get("id").asLong() == quantum.getId()) {
+        assertEquals(
+            origin + "/api/v1/stops-images/quantum%20Commons.png",
+            stop.get("image_url").asString());
+        return;
+      }
+    }
+    fail("Quantum Commons missing from stop list");
   }
 
   private void assertError(int status, HttpResponse<String> response) throws Exception {
