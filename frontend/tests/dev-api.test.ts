@@ -49,3 +49,48 @@ test('dev stop mutations persist in memory and validate inputs', async ({ reques
   expect((await request.get(path)).status()).toBe(404);
   expect((await request.get('/api/v1/stops-images/unknown.png')).status()).toBe(404);
 });
+
+test('dev API returns contract errors for invalid input and IDs', async ({ request }) => {
+  const input = {
+    name: 'Cejl',
+    wheelchair_accessible: true,
+    has_shelter: false,
+    has_ticket_machine: true
+  };
+  const created = await request.post('/api/v1/stops', { data: input });
+  const path = `/api/v1/stops/${(await created.json()).id}`;
+  try {
+    for (const data of [
+      { ...input, extra: 1 },
+      { ...input, image_url: '/image.png' },
+      { ...input, has_shelter: 'true' },
+      { name: 'Cejl' }
+    ]) {
+      for (const response of [
+        await request.post('/api/v1/stops', { data }),
+        await request.put(path, { data })
+      ]) {
+        expect(response.status()).toBe(400);
+        expect(await response.json()).toEqual({ error: expect.any(String) });
+      }
+    }
+    for (const method of ['GET', 'PUT', 'DELETE']) {
+      for (const id of ['0', '-1', '1.5', 'abc']) {
+        const response = await request.fetch(`/api/v1/stops/${id}`, {
+          method,
+          data: method === 'PUT' ? input : undefined
+        });
+        expect(response.status()).toBe(400);
+        expect(await response.json()).toEqual({ error: expect.any(String) });
+      }
+      const response = await request.fetch('/api/v1/stops/9999999', {
+        method,
+        data: method === 'PUT' ? input : undefined
+      });
+      expect(response.status()).toBe(404);
+      expect(await response.json()).toEqual({ error: 'Stop not found' });
+    }
+  } finally {
+    await request.delete(path);
+  }
+});

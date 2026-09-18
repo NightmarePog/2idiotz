@@ -3,7 +3,7 @@
   "info": {
     "description": "API for managing public transport stops in Think different Academy.",
     "title": "Think different Transit API",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "servers": [
     {
@@ -78,6 +78,16 @@
               }
             },
             "description": "Stop created successfully"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Invalid stop ID or input data"
           }
         },
         "summary": "Create a new stop",
@@ -95,13 +105,34 @@
             "name": "id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             }
           }
         ],
         "responses": {
           "204": {
             "description": "Stop deleted successfully"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Invalid stop ID or input data"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Stop not found"
           }
         },
         "summary": "Delete a stop",
@@ -117,7 +148,8 @@
             "name": "id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             }
           }
         ],
@@ -131,12 +163,33 @@
               }
             },
             "description": "Stop detail"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Invalid stop ID or input data"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Stop not found"
           }
         },
         "summary": "Get stop detail",
         "tags": ["Stops"]
       },
       "put": {
+        "description": "Replaces the editable data of an existing stop. The complete StopInput object must be provided.",
         "operationId": "updateStop",
         "parameters": [
           {
@@ -146,7 +199,8 @@
             "name": "id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             }
           }
         ],
@@ -170,6 +224,26 @@
               }
             },
             "description": "Stop updated successfully"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Invalid stop ID or input data"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Stop not found"
           }
         },
         "summary": "Update a stop",
@@ -197,6 +271,17 @@
   },
   "components": {
     "schemas": {
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Stop not found"
+          }
+        },
+        "required": ["error"]
+      },
       "HealthResponse": {
         "type": "object",
         "properties": {
@@ -209,6 +294,7 @@
       },
       "Stop": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "has_shelter": {
             "type": "boolean"
@@ -222,10 +308,14 @@
             "readOnly": true
           },
           "image_url": {
-            "type": ["string", "null"]
+            "type": ["string", "null"],
+            "format": "uri",
+            "maxLength": 255
           },
           "name": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
           },
           "wheelchair_accessible": {
             "type": "boolean"
@@ -242,6 +332,7 @@
       },
       "StopInput": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
           "has_shelter": {
             "type": "boolean"
@@ -251,13 +342,14 @@
           },
           "image_url": {
             "type": ["string", "null"],
+            "format": "uri",
             "maxLength": 255,
             "minLength": 0
           },
           "name": {
             "type": "string",
             "maxLength": 255,
-            "minLength": 0
+            "minLength": 1
           },
           "wheelchair_accessible": {
             "type": "boolean"

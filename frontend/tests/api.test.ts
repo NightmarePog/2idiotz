@@ -164,14 +164,24 @@ for (const invalid of [
   });
 }
 
-test('station input accepts nullable image strings without a URL pattern', () => {
-  for (const image_url of [
-    null,
-    '',
-    'images/station photo.webp',
-    '/uploads/cejl.svg',
-    'not a URL'
-  ]) {
+test('station input validates URLs, types and unknown fields', () => {
+  for (const image_url of [null, 'https://example.com/stop.png']) {
     assert.deepEqual(zStopInput.parse({ ...stopInput, image_url }), { ...stopInput, image_url });
+  }
+  for (const image_url of [
+    '',
+    '/uploads/cejl.svg',
+    'not a URL',
+    false,
+    'https://example.com/' + 'x'.repeat(237)
+  ]) {
+    assert.equal(zStopInput.safeParse({ ...stopInput, image_url }).success, false);
+  }
+  for (const invalid of [
+    { ...stopInput, unknown: 1 },
+    { ...stopInput, name: '' },
+    { ...stopInput, has_shelter: 'true' }
+  ]) {
+    assert.equal(zStopInput.safeParse(invalid).success, false);
   }
 });

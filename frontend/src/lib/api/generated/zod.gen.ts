@@ -2,6 +2,10 @@
 
 import * as z from 'zod';
 
+export const zError = z.object({
+    error: z.string()
+}).strict();
+
 export const zHealthResponse = z.object({
     status: z.enum(['ok'])
 });
@@ -10,18 +14,18 @@ export const zStop = z.object({
     has_shelter: z.boolean(),
     has_ticket_machine: z.boolean(),
     id: z.int().readonly(),
-    image_url: z.string().nullable(),
-    name: z.string(),
+    image_url: z.url().max(255).nullable(),
+    name: z.string().min(1).max(255),
     wheelchair_accessible: z.boolean()
-});
+}).strict();
 
 export const zStopInput = z.object({
     has_shelter: z.boolean(),
     has_ticket_machine: z.boolean(),
-    image_url: z.string().min(0).max(255).nullish(),
-    name: z.string().min(0).max(255),
+    image_url: z.url().min(0).max(255).nullish(),
+    name: z.string().min(1).max(255),
     wheelchair_accessible: z.boolean()
-});
+}).strict();
 
 export const zTeamResponse = z.object({
     members: z.array(z.string().min(1)),
@@ -31,10 +35,10 @@ export const zTeamResponse = z.object({
 export const zStopWritable = z.object({
     has_shelter: z.boolean(),
     has_ticket_machine: z.boolean(),
-    image_url: z.string().nullable(),
-    name: z.string(),
+    image_url: z.url().max(255).nullable(),
+    name: z.string().min(1).max(255),
     wheelchair_accessible: z.boolean()
-});
+}).strict();
 
 /**
  * OK
@@ -54,7 +58,7 @@ export const zCreateStopBody = zStopInput;
 export const zCreateStopResponse = zStop;
 
 export const zDeleteStopPath = z.object({
-    id: z.int()
+    id: z.int().gte(1)
 });
 
 /**
@@ -63,7 +67,7 @@ export const zDeleteStopPath = z.object({
 export const zDeleteStopResponse = z.void();
 
 export const zGetStopPath = z.object({
-    id: z.int()
+    id: z.int().gte(1)
 });
 
 /**
@@ -74,7 +78,7 @@ export const zGetStopResponse = zStop;
 export const zUpdateStopBody = zStopInput;
 
 export const zUpdateStopPath = z.object({
-    id: z.int()
+    id: z.int().gte(1)
 });
 
 /**

@@ -65,6 +65,12 @@ export function devApi(): Plugin {
       server.middlewares.use((request, response, next) => {
         const path = new URL(request.url ?? '/', 'http://localhost').pathname;
         if (!path.startsWith('/api/')) return next();
+        const publicStop = (stop: Stop): Stop => ({
+          ...stop,
+          image_url: stop.image_url
+            ? new URL(stop.image_url, `http://${request.headers.host}`).href
+            : null
+        });
 
         void (async () => {
           const asset = assets.get(path);
@@ -77,7 +83,7 @@ export function devApi(): Plugin {
           if (request.method === 'GET') {
             if (path === '/api/v1/health') return json(response, 200, { status: 'ok' });
             if (path === '/api/v1/team') return json(response, 200, team);
-            if (path === '/api/v1/stops') return json(response, 200, stops);
+            if (path === '/api/v1/stops') return json(response, 200, stops.map(publicStop));
           }
           if (path === '/api/v1/stops' && request.method === 'POST') {
             try {
@@ -87,14 +93,21 @@ export function devApi(): Plugin {
               response.setHeader('Location', `/api/v1/stops/${stop.id}`);
               return json(response, 201, stop);
             } catch {
-              return json(response, 400, { message: 'Invalid stop' });
+              return json(response, 400, { error: 'Invalid stop' });
             }
           }
-          const match = /^\/api\/v1\/stops\/(\d+)$/.exec(path);
+          const match = /^\/api\/v1\/stops\/([^/]+)$/.exec(path);
           if (match) {
+            if (
+              !/^\d+$/.test(match[1]) ||
+              !Number.isSafeInteger(Number(match[1])) ||
+              Number(match[1]) < 1
+            ) {
+              return json(response, 400, { error: 'Invalid stop ID' });
+            }
             const index = stops.findIndex((stop) => stop.id === Number(match[1]));
-            if (index < 0) return json(response, 404, { message: 'Stop not found' });
-            if (request.method === 'GET') return json(response, 200, stops[index]);
+            if (index < 0) return json(response, 404, { error: 'Stop not found' });
+            if (request.method === 'GET') return json(response, 200, publicStop(stops[index]));
             if (request.method === 'DELETE') {
               stops.splice(index, 1);
               return json(response, 204);
@@ -103,13 +116,13 @@ export function devApi(): Plugin {
               try {
                 const data = await input(request);
                 stops[index] = { ...data, id: stops[index].id, image_url: data.image_url ?? null };
-                return json(response, 200, stops[index]);
+                return json(response, 200, publicStop(stops[index]));
               } catch {
-                return json(response, 400, { message: 'Invalid stop' });
+                return json(response, 400, { error: 'Invalid stop' });
               }
             }
           }
-          json(response, 404, { message: 'Unknown dev API route' });
+          json(response, 404, { error: 'Unknown dev API route' });
         })().catch(next);
       });
     }

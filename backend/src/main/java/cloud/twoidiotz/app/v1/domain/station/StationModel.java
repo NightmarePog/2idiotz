@@ -1,7 +1,7 @@
 package cloud.twoidiotz.app.v1.domain.station;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import lombok.Data;
@@ -13,8 +13,8 @@ public class StationModel {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotBlank
-  @Size(max = 255)
+  @NotNull
+  @Size(min = 1, max = 255)
   private String name;
 
   @Size(max = 255)

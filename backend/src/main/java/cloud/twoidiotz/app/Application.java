@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
     info =
         @Info(
             title = "Think different Transit API",
-            version = "1.0.0",
+            version = "1.1.0",
             description = "API for managing public transport stops in Think different Academy."),
     servers = @Server(url = "/api/v1"))
 @SpringBootApplication

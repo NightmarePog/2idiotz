@@ -69,6 +69,28 @@ class OpenApiExportTest {
     assertEquals("deleteStop", contract.at("/paths/~1stops~1{id}/delete/operationId").asString());
     assertTrue(contract.at("/paths/~1stops/post/responses").has("201"));
     assertTrue(contract.at("/paths/~1stops~1{id}/delete/responses").has("204"));
+    assertEquals("1.1.0", contract.at("/info/version").asString());
+    for (var method : new String[] {"get", "put", "delete"}) {
+      var operation = contract.at("/paths/~1stops~1{id}/" + method);
+      assertEquals(1, operation.at("/parameters/0/schema/minimum").asInt());
+      for (var status : new String[] {"400", "404"}) {
+        assertEquals(
+            "#/components/schemas/Error",
+            operation
+                .at("/responses/" + status + "/content/application~1json/schema/$ref")
+                .asString());
+      }
+    }
+    assertEquals(
+        "#/components/schemas/Error",
+        contract
+            .at("/paths/~1stops/post/responses/400/content/application~1json/schema/$ref")
+            .asString());
+    for (var schema : new String[] {"Stop", "StopInput", "Error"}) {
+      assertFalse(
+          contract.at("/components/schemas/" + schema + "/additionalProperties").asBoolean(true));
+    }
+    assertEquals(1, contract.at("/components/schemas/StopInput/properties/name/minLength").asInt());
     var stopSchema = contract.at("/components/schemas/Stop");
     assertEquals("int64", stopSchema.at("/properties/id/format").asString());
     assertTrue(stopSchema.at("/properties/id/readOnly").asBoolean());
@@ -90,7 +112,7 @@ class OpenApiExportTest {
       assertTrue(properties.has("image_url"));
       assertTrue(properties.has("wheelchair_accessible"));
       assertFalse(properties.has("imageUrl"));
-      assertFalse(properties.get("image_url").has("pattern"));
+      assertEquals("uri", properties.get("image_url").get("format").asString());
     }
     var stops =
         client.send(

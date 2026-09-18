@@ -106,7 +106,7 @@ class StopApiIntegrationTest {
       for (var invalid :
           new String[] {
             "{}",
-            INPUT.replace("\"Cejl\"", "\" \""),
+            INPUT.replace("\"Cejl\"", "\"\""),
             INPUT.replace("\"Cejl\"", "\"" + "x".repeat(256) + "\""),
             INPUT.replace("\"wheelchair_accessible\":true,", ""),
             INPUT.replace("\"has_shelter\":true,", ""),
@@ -126,28 +126,105 @@ class StopApiIntegrationTest {
   }
 
   @Test
-  void acceptsImageStringsWithoutUrlOrFilenameRestrictions() throws Exception {
-    for (var image :
-        new String[] {
-          "images/station photo.webp", "/uploads/cejl.svg", "not a URL", "", "x".repeat(255)
-        }) {
-      var input = (tools.jackson.databind.node.ObjectNode) mapper.readTree(INPUT);
-      input.put("image_url", image);
-      var created = request("POST", "/stops", input.toString());
-      assertEquals(201, created.statusCode(), image);
-      var body = mapper.readTree(created.body());
-      var id = body.get("id").asLong();
-      try {
-        assertEquals(image, body.get("image_url").asString());
-        input.put("image_url", "another image.avif");
-        assertEquals(200, request("PUT", "/stops/" + id, input.toString()).statusCode());
-        assertEquals("another image.avif", stations.findById(id).orElseThrow().getImageUrl());
-        input.put("image_url", "x".repeat(256));
-        assertEquals(400, request("PUT", "/stops/" + id, input.toString()).statusCode());
-      } finally {
-        stations.deleteById(id);
+  void validatesStrictInputsWithoutChangingStoredStops() throws Exception {
+    var created = request("POST", "/stops", INPUT);
+    var id = mapper.readTree(created.body()).get("id").asLong();
+    try {
+      var invalid = new java.util.ArrayList<String>();
+      for (var field :
+          new String[] {"name", "wheelchair_accessible", "has_shelter", "has_ticket_machine"}) {
+        var missing = (tools.jackson.databind.node.ObjectNode) mapper.readTree(INPUT);
+        missing.remove(field);
+        invalid.add(missing.toString());
+        for (var value : new String[] {"null", "42", "[]", "{}", "\"true\""}) {
+          if (field.equals("name") && value.equals("\"true\"")) continue;
+          var wrong = (tools.jackson.databind.node.ObjectNode) mapper.readTree(INPUT);
+          wrong.set(field, mapper.readTree(value));
+          invalid.add(wrong.toString());
+        }
       }
+      for (var image :
+          new String[] {
+            "",
+            "images/test.png",
+            "/image.png",
+            "not a URL",
+            "https://",
+            "https://example.com/" + "x".repeat(236)
+          }) {
+        var input = (tools.jackson.databind.node.ObjectNode) mapper.readTree(INPUT);
+        input.put("image_url", image);
+        invalid.add(input.toString());
+      }
+      for (var extra : new String[] {"id", "unknown", "imageUrl"}) {
+        var input = (tools.jackson.databind.node.ObjectNode) mapper.readTree(INPUT);
+        input.put(extra, 1);
+        invalid.add(input.toString());
+      }
+      invalid.add(INPUT.replace("\"name\":", "\"image_url\":false,\"name\":"));
+      invalid.add(INPUT.replace("\"Cejl\"", "false"));
+      invalid.add(INPUT.replace("\"Cejl\"", "\"\""));
+      invalid.add(INPUT.replace("Cejl", "x".repeat(256)));
+      invalid.addAll(java.util.List.of("null", "[]", "{", ""));
+      for (var input : invalid) {
+        assertError(400, request("POST", "/stops", input));
+        assertError(400, request("PUT", "/stops/" + id, input));
+      }
+      assertEquals(
+          mapper.readTree(created.body()),
+          mapper.readTree(request("GET", "/stops/" + id, null).body()));
+      for (var image :
+          new String[] {
+            "https://example.com/stops/cejl.jpg", "https://example.com/" + "x".repeat(235)
+          }) {
+        var input = (tools.jackson.databind.node.ObjectNode) mapper.readTree(INPUT);
+        input.put("name", "x".repeat(255));
+        input.put("image_url", image);
+        var result = request("POST", "/stops", input.toString());
+        assertEquals(201, result.statusCode(), result.body());
+        var newId = mapper.readTree(result.body()).get("id").asLong();
+        stations.deleteById(newId);
+        assertEquals(200, request("PUT", "/stops/" + id, input.toString()).statusCode());
+      }
+    } finally {
+      stations.deleteById(id);
     }
+  }
+
+  @Test
+  void returnsContractErrorsForInvalidAndMissingIds() throws Exception {
+    for (var method : new String[] {"GET", "PUT", "DELETE"}) {
+      for (var id : new String[] {"0", "-1", "1.5", "abc", "9223372036854775808"}) {
+        assertError(400, request(method, "/stops/" + id, method.equals("PUT") ? INPUT : null));
+      }
+      assertError(
+          404, request(method, "/stops/9223372036854775807", method.equals("PUT") ? INPUT : null));
+    }
+  }
+
+  @Test
+  void seededImageUrlsUseThePublicProxyOrigin() throws Exception {
+    var response =
+        HttpClient.newHttpClient()
+            .send(
+                HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/api/v1/stops"))
+                    .header("X-Forwarded-Proto", "https")
+                    .header("X-Forwarded-Host", "transit.example.com")
+                    .build(),
+                HttpResponse.BodyHandlers.ofString());
+    assertEquals(200, response.statusCode());
+    var image = mapper.readTree(response.body()).get(0).get("image_url").asString();
+    assertTrue(image.startsWith("https://transit.example.com/api/v1/stops-images/"), image);
+  }
+
+  private void assertError(int status, HttpResponse<String> response) throws Exception {
+    assertEquals(status, response.statusCode(), response.body());
+    assertTrue(
+        response.headers().firstValue("Content-Type").orElse("").startsWith("application/json"));
+    var body = mapper.readTree(response.body());
+    assertEquals(Set.of("error"), new HashSet<>(body.propertyNames()));
+    assertTrue(body.get("error").isString());
+    assertFalse(body.get("error").asString().isEmpty());
   }
 
   private HttpResponse<String> request(String method, String path, String body) throws Exception {

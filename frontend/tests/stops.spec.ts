@@ -6,7 +6,7 @@ import { mockBrandAssets } from './fixtures/assets';
 const stops = [
   createStop(12, {
     name: 'Cejl',
-    image_url: '/api/v1/stops-images/turingTerminal.png',
+    image_url: 'http://127.0.0.1:3301/api/v1/stops-images/turingTerminal.png',
     wheelchair_accessible: true,
     has_shelter: true,
     has_ticket_machine: false

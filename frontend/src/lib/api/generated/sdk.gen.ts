@@ -4,7 +4,7 @@ import * as z from 'zod';
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateStopData, CreateStopResponses, DeleteStopData, DeleteStopResponses, GetHealthData, GetHealthResponses, GetStopData, GetStopResponses, GetStopsData, GetStopsResponses, GetTeamData, GetTeamResponses, UpdateStopData, UpdateStopResponses } from './types.gen';
+import type { CreateStopData, CreateStopErrors, CreateStopResponses, DeleteStopData, DeleteStopErrors, DeleteStopResponses, GetHealthData, GetHealthResponses, GetStopData, GetStopErrors, GetStopResponses, GetStopsData, GetStopsResponses, GetTeamData, GetTeamResponses, UpdateStopData, UpdateStopErrors, UpdateStopResponses } from './types.gen';
 import { zCreateStopBody, zCreateStopResponse, zDeleteStopPath, zDeleteStopResponse, zGetHealthResponse, zGetStopPath, zGetStopResponse, zGetStopsResponse, zGetTeamResponse, zUpdateStopBody, zUpdateStopPath, zUpdateStopResponse } from './zod.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
@@ -49,7 +49,7 @@ export const getStops = <ThrowOnError extends boolean = false>(options?: Options
 /**
  * Create a new stop
  */
-export const createStop = <ThrowOnError extends boolean = false>(options: Options<CreateStopData, ThrowOnError>): RequestResult<CreateStopResponses, unknown, ThrowOnError> => (options.client ?? client).post<CreateStopResponses, unknown, ThrowOnError>({
+export const createStop = <ThrowOnError extends boolean = false>(options: Options<CreateStopData, ThrowOnError>): RequestResult<CreateStopResponses, CreateStopErrors, ThrowOnError> => (options.client ?? client).post<CreateStopResponses, CreateStopErrors, ThrowOnError>({
     requestValidator: async (data) => await z.object({
         body: zCreateStopBody,
         path: z.never().optional(),
@@ -67,7 +67,7 @@ export const createStop = <ThrowOnError extends boolean = false>(options: Option
 /**
  * Delete a stop
  */
-export const deleteStop = <ThrowOnError extends boolean = false>(options: Options<DeleteStopData, ThrowOnError>): RequestResult<DeleteStopResponses, unknown, ThrowOnError> => (options.client ?? client).delete<DeleteStopResponses, unknown, ThrowOnError>({
+export const deleteStop = <ThrowOnError extends boolean = false>(options: Options<DeleteStopData, ThrowOnError>): RequestResult<DeleteStopResponses, DeleteStopErrors, ThrowOnError> => (options.client ?? client).delete<DeleteStopResponses, DeleteStopErrors, ThrowOnError>({
     requestValidator: async (data) => await z.object({
         body: z.never().optional(),
         path: zDeleteStopPath,
@@ -81,7 +81,7 @@ export const deleteStop = <ThrowOnError extends boolean = false>(options: Option
 /**
  * Get stop detail
  */
-export const getStop = <ThrowOnError extends boolean = false>(options: Options<GetStopData, ThrowOnError>): RequestResult<GetStopResponses, unknown, ThrowOnError> => (options.client ?? client).get<GetStopResponses, unknown, ThrowOnError>({
+export const getStop = <ThrowOnError extends boolean = false>(options: Options<GetStopData, ThrowOnError>): RequestResult<GetStopResponses, GetStopErrors, ThrowOnError> => (options.client ?? client).get<GetStopResponses, GetStopErrors, ThrowOnError>({
     requestValidator: async (data) => await z.object({
         body: z.never().optional(),
         path: zGetStopPath,
@@ -94,8 +94,10 @@ export const getStop = <ThrowOnError extends boolean = false>(options: Options<G
 
 /**
  * Update a stop
+ *
+ * Replaces the editable data of an existing stop. The complete StopInput object must be provided.
  */
-export const updateStop = <ThrowOnError extends boolean = false>(options: Options<UpdateStopData, ThrowOnError>): RequestResult<UpdateStopResponses, unknown, ThrowOnError> => (options.client ?? client).put<UpdateStopResponses, unknown, ThrowOnError>({
+export const updateStop = <ThrowOnError extends boolean = false>(options: Options<UpdateStopData, ThrowOnError>): RequestResult<UpdateStopResponses, UpdateStopErrors, ThrowOnError> => (options.client ?? client).put<UpdateStopResponses, UpdateStopErrors, ThrowOnError>({
     requestValidator: async (data) => await z.object({
         body: zUpdateStopBody,
         path: zUpdateStopPath,

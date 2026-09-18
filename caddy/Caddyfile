@@ -2,7 +2,9 @@
 	encode zstd gzip
 	@api path /api /api/*
 	handle @api {
-		reverse_proxy {$API_UPSTREAM:localhost:8080}
+		reverse_proxy {$API_UPSTREAM:localhost:8080} {
+			header_up X-Forwarded-Proto {$PUBLIC_SCHEME:http}
+		}
 	}
 	handle {
 		reverse_proxy {$WEB_UPSTREAM:localhost:3001} {

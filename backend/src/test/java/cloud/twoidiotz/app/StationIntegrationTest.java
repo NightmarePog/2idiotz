@@ -125,7 +125,7 @@ class StationIntegrationTest {
   void validatesRequiredFieldsAndLengths() {
     var station = station();
     assertTrue(validator.validate(station).isEmpty());
-    for (String invalidName : new String[] {null, "", "   ", "n".repeat(256)}) {
+    for (String invalidName : new String[] {null, "", "n".repeat(256)}) {
       station.setName(invalidName);
       assertFalse(validator.validateProperty(station, "name").isEmpty());
     }

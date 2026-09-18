@@ -4,6 +4,10 @@ export type ClientOptions = {
     baseUrl: `${string}://${string}/api/v1` | (string & {});
 };
 
+export type Error = {
+    error: string;
+};
+
 export type HealthResponse = {
     status: 'ok';
 };
@@ -77,6 +81,15 @@ export type CreateStopData = {
     url: '/stops';
 };
 
+export type CreateStopErrors = {
+    /**
+     * Invalid stop ID or input data
+     */
+    400: Error;
+};
+
+export type CreateStopError = CreateStopErrors[keyof CreateStopErrors];
+
 export type CreateStopResponses = {
     /**
      * Stop created successfully
@@ -97,6 +110,19 @@ export type DeleteStopData = {
     query?: never;
     url: '/stops/{id}';
 };
+
+export type DeleteStopErrors = {
+    /**
+     * Invalid stop ID or input data
+     */
+    400: Error;
+    /**
+     * Stop not found
+     */
+    404: Error;
+};
+
+export type DeleteStopError = DeleteStopErrors[keyof DeleteStopErrors];
 
 export type DeleteStopResponses = {
     /**
@@ -119,6 +145,19 @@ export type GetStopData = {
     url: '/stops/{id}';
 };
 
+export type GetStopErrors = {
+    /**
+     * Invalid stop ID or input data
+     */
+    400: Error;
+    /**
+     * Stop not found
+     */
+    404: Error;
+};
+
+export type GetStopError = GetStopErrors[keyof GetStopErrors];
+
 export type GetStopResponses = {
     /**
      * Stop detail
@@ -139,6 +178,19 @@ export type UpdateStopData = {
     query?: never;
     url: '/stops/{id}';
 };
+
+export type UpdateStopErrors = {
+    /**
+     * Invalid stop ID or input data
+     */
+    400: Error;
+    /**
+     * Stop not found
+     */
+    404: Error;
+};
+
+export type UpdateStopError = UpdateStopErrors[keyof UpdateStopErrors];
 
 export type UpdateStopResponses = {
     /**
