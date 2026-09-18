@@ -1,8 +1,26 @@
 <!doctype html>
-<html lang="cs">
+<html lang="cs" class="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1a1a1a" />
+    <link
+      rel="preload"
+      href="/api/v1/assets/fonts/dosis-variable.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <script>
+      try {
+        document.documentElement.classList.toggle(
+          'dark',
+          localStorage.getItem('theme') !== 'light'
+        );
+      } catch {
+        // Dark is the default when storage is unavailable.
+      }
+    </script>
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover">

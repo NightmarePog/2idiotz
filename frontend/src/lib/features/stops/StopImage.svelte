@@ -1,13 +1,34 @@
 <script lang="ts">
+  import { cn } from '$lib/utils';
+
   let {
     src,
     name,
-    eager = false
-  }: { src: string | null; name: string; eager?: boolean } = $props();
+    eager = false,
+    class: className,
+    id,
+    transition = false
+  }: {
+    src: string | null;
+    name: string;
+    eager?: boolean;
+    class?: string;
+    id?: number | string;
+    transition?: boolean;
+  } = $props();
+
   let failedSrc = $state<string | null>();
 </script>
 
-<div class="flex aspect-[3/2] items-center justify-center overflow-hidden bg-muted">
+<div
+  class={cn(
+    'stop-image-frame relative flex aspect-[3/2] items-center justify-center overflow-hidden bg-muted',
+    className
+  )}
+  style:view-transition-name={transition && id !== undefined
+    ? `stop-image-${String(id).replace(/[^a-zA-Z0-9_-]/g, '-')}`
+    : undefined}
+>
   {#if src && src !== failedSrc}
     <img
       {src}
@@ -15,8 +36,9 @@
       width="1536"
       height="1024"
       loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
       decoding="async"
-      class="h-full w-full object-cover"
+      class="stop-image size-full object-cover"
       onerror={() => (failedSrc = src)}
     />
   {:else}

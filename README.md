@@ -6,6 +6,10 @@ All new or modified UI must follow the [Think different Academy brand guide](doc
 
 The frontend uses Tailwind CSS and shadcn-svelte. Page layout uses utility classes; `src/app.css` contains the shared theme. Add components as needed with `pnpm exec shadcn-svelte add <component>` from `frontend`.
 
+The interface defaults to dark mode; the header toggle saves a light/dark preference locally before the next page paints. The homepage is a concise landing page with one link to the stop finder and an API-provided stop photo. Search and amenity filters live on `/stops`. Results use compact photo rows; supporting browsers transition the selected stop image into its detail view. All motion respects reduced-motion preferences. Search (`q`) and combined amenity filters (`filter=accessible,shelter,tickets`) are shareable URL state and survive detail navigation.
+
+Stop images use responsive WebP derivatives in `frontend/static/images/stops`, with the original API image as a fallback. To regenerate them from the unchanged backend seeds, install Pillow in a Python environment and run `python3 frontend/scripts/optimize-stop-images.py` from the repository root.
+
 Frontend code follows three layers:
 
 - `frontend/src/lib/ui`: shadcn-svelte primitives (Button, Card, Badge, Empty, Spinner). `components.json` directs the CLI here. Shared brand and touch-target adjustments belong in these primitives and the CSS theme.
@@ -31,7 +35,17 @@ Open http://localhost:8080. Stop with `docker compose down`. PostgreSQL data is 
 
 ## Development
 
-Use Java 21, Node 22.22.2 or newer, pnpm 10.34.5, and Python 3.
+Frontend-only development needs Node 22.22.2 or newer and pnpm 10.34.5:
+
+```sh
+cd frontend
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+This starts Faker-backed development without a database or Java. Run `pnpm test:dev` to verify the standalone API, images, and stop mutations.
+
+For development against the real backend, also use Java 21 and Python 3:
 
 Use Python's standard library for automation involving files or JSON, and shell for short command sequences. Keep tool configuration and application tests in their native formats; do not add handwritten JavaScript automation scripts.
 
@@ -47,10 +61,12 @@ In another terminal:
 ```sh
 cd frontend
 pnpm install --frozen-lockfile
-pnpm dev
+pnpm dev:backend
 ```
 
-Vite forwards `/api` to the backend on port 8080.
+`pnpm dev` runs independently with a seeded Faker API in Vite: no Spring or PostgreSQL is required. It serves stop data, team data, health, images, logo, and font through `/api/v1/**`. Images and brand files are read from backend resources on disk; no backend process is started. Stop edits live in memory and reset when Vite restarts.
+
+To use the real backend instead, run `pnpm dev:backend`; Vite then forwards `/api` to Spring on port 8080. Production always uses the real backend.
 
 The backend sets `/api/v1` globally with `server.servlet.context-path` in `backend/src/main/resources/application.yaml`. Controllers declare only their resource path, such as `@GetMapping("/health")`. Both Caddy and Vite preserve the full request path when proxying to the backend.
 
@@ -131,3 +147,9 @@ Tour de Cloud's current deployment schema does not expose volume configuration. 
 Seed assets and SQL seed scripts live in `backend/src/main/resources/seed`. Flyway scans both `db/migration` and `seed`. V3 retains the original team SQL seed. V5 streams the frozen `seed/v5/stops.csv` through PostgreSQL JDBC `COPY` into a temporary typed table, then inserts the supported station columns, preserving existing IDs and advancing the identity sequence. The CSV includes explicit image paths; Spring Boot serves PNGs from `seed/stopsImages` at `/api/v1/stops-images/**`. Line assignments remain in the CSV until a line model exists. CSV parsing is handled by PostgreSQL; Commons CSV is only a test dependency.
 
 V5 runs once. Its checksum covers the CSV, staging/mapping SQL, and COPY command (normalizing CRLF for cross-platform checkouts). Treat `seed/v5` as immutable: subsequent data changes need a new migration and their own versioned resources. Restarts preserve edited and deleted rows. Flyway records the checksum when V5 is applied and validates it on subsequent starts. Do not delete migration history or automatically repair it during application startup.
+
+## Frontend fixtures and assets
+
+Faker.js (`@faker-js/faker`) powers the database-free development API in `frontend/dev/api.ts` and deterministic test fixtures in `frontend/tests/fixtures/stops.ts`. Pages use the same generated SDK and API URLs in both development and production. The mock API supports stop listing, detail, creation, editing, and deletion, with generated contract validation for writes.
+
+Stop images use the API's `image_url` directly. The homepage previews the first stop with an image returned by the API. Its primary action remains available when that preview cannot load. Missing or failed images show a placeholder. Logo and font files live in `backend/src/main/resources/assets` and are served at `/api/v1/assets/**`. The frontend does not maintain local image copies or a derivative-generation script.

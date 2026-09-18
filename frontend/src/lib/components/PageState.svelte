@@ -10,7 +10,7 @@
     onretry
   }: {
     title: string;
-    description: string;
+    description?: string;
     headingLevel?: 1 | 2;
     error?: boolean;
     onretry?: () => void;
@@ -22,12 +22,12 @@
   role={error ? undefined : 'status'}
 >
   <Empty.Header class="max-w-none items-start text-left">
-    <Empty.Title class="text-2xl font-semibold">
+    <Empty.Title>
       <svelte:element this={headingLevel === 1 ? 'h1' : 'h2'} role={error ? 'alert' : undefined}
         >{title}</svelte:element
       >
     </Empty.Title>
-    <Empty.Description class="text-lg">{description}</Empty.Description>
+    {#if description}<Empty.Description>{description}</Empty.Description>{/if}
   </Empty.Header>
   {#if onretry}
     <Empty.Content class="items-start">

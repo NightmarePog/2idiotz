@@ -58,6 +58,11 @@ Následující zásady doplňují manuál; nejsou jeho citací:
 
 ## Lokální webové podklady
 
-- `frontend/static/brand/tda-logo.svg`: oficiální horizontální varianta `Think-different-Academy_LOGO_oficialni_1.svg` ze [sdílené složky SVG](https://drive.google.com/drive/folders/1HUzlC_QSbWWVgJNwh-i6-O_1Lp-KQQQ1), soubor ID `1ZgNgsFD-xGU2rCMUZWipLJnE1HUc3OAz`. Staženo 17. 9. 2026; poměr stran zachován.
-- `frontend/static/fonts/dosis-variable.ttf`: proměnlivé písmo Dosis z [Google Fonts](https://github.com/google/fonts/tree/main/ofl/dosis), lokálně hostované včetně licence `OFL-Dosis.txt`.
+- `backend/src/main/resources/assets/brand/tda-logo.svg`: oficiální horizontální varianta `Think-different-Academy_LOGO_oficialni_1.svg` ze [sdílené složky SVG](https://drive.google.com/drive/folders/1HUzlC_QSbWWVgJNwh-i6-O_1Lp-KQQQ1), soubor ID `1ZgNgsFD-xGU2rCMUZWipLJnE1HUc3OAz`. Staženo 17. 9. 2026; poměr stran zachován.
+- `backend/src/main/resources/assets/brand/tda-logo-dark.svg`: nezměněná oficiální varianta pro tmavé pozadí, [Think-different-Academy_LOGO_oficialni_1_dark-mode.svg](https://drive.google.com/file/d/1OOddazgOInkkhpwNiUHqu_EwT3lTvE2l/view), stažená 18. 9. 2026 ze stejné složky SVG. Modrý erb a bílé písmo na průhledném pozadí. Hlavička přepíná obě varianty podle tématu bez podkladové dlaždice.
+- `backend/src/main/resources/assets/fonts/dosis-variable.ttf`: proměnlivé písmo Dosis z [Google Fonts](https://github.com/google/fonts/tree/main/ofl/dosis), lokálně hostované včetně licence `OFL-Dosis.txt`.
 - Světlé podklady, tlumené texty a barvy chyb v CSS doplňují oficiální paletu pro čitelnost UI; nejde o další barvy předepsané manuálem.
+
+## Texty v rozhraní
+
+Text omezujte na nezbytné názvy, popisky ovládání, údaje a stručnou zpětnou vazbu. Nepřidávejte dekorativní slogany, opakované označení aplikace, duplicitní popisky fotek ani vysvětlování zřejmých ovládacích prvků. Zachovejte přístupné názvy a popisky formulářů.

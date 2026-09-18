@@ -1,0 +1,403 @@
+{
+  "retrieved_at": "2026-09-18T08:19:58.920986+00:00",
+  "downloads": [
+    {
+      "path": "docs/motion/animate.md",
+      "source": {
+        "mcp": "https://mcp.motion.dev",
+        "uri": "motion://docs/js/animate",
+        "page": "https://motion.dev/docs/animate"
+      },
+      "bytes": 19257,
+      "sha256": "4ba0906168f00cbef2f2c4919becc2eba823694dc793e4e34d9a97638b74c7fe"
+    },
+    {
+      "path": "docs/motion/easing-functions.md",
+      "source": {
+        "mcp": "https://mcp.motion.dev",
+        "uri": "motion://docs/js/easing-functions",
+        "page": "https://motion.dev/docs/easing-functions"
+      },
+      "bytes": 3328,
+      "sha256": "7c21389eb41121946cd60db67b14802ae4d31454deaa91e398481f3a51b159a8"
+    },
+    {
+      "path": "docs/motion/performance.md",
+      "source": {
+        "mcp": "https://mcp.motion.dev",
+        "uri": "motion://docs/js/performance",
+        "page": "https://motion.dev/docs/performance"
+      },
+      "bytes": 9793,
+      "sha256": "8e0944d64c0f228666881a17295575a77ba8bf75936a19604a1da98af94a9d32"
+    },
+    {
+      "path": "docs/motion/scroll.md",
+      "source": {
+        "mcp": "https://mcp.motion.dev",
+        "uri": "motion://docs/js/scroll",
+        "page": "https://motion.dev/docs/scroll"
+      },
+      "bytes": 6534,
+      "sha256": "2e91859d0f502ddeef41fb82f2f610a778eed39fe785168e8d209a5c7bd66748"
+    },
+    {
+      "path": "docs/motion/spring.md",
+      "source": {
+        "mcp": "https://mcp.motion.dev",
+        "uri": "motion://docs/js/spring",
+        "page": "https://motion.dev/docs/spring"
+      },
+      "bytes": 4118,
+      "sha256": "0256a54c47ae6895694b859df1b5002bc3ea43488b585cf7edb4c23ed0b8cbae"
+    },
+    {
+      "path": "docs/motion/stagger.md",
+      "source": {
+        "mcp": "https://mcp.motion.dev",
+        "uri": "motion://docs/js/stagger",
+        "page": "https://motion.dev/docs/stagger"
+      },
+      "bytes": 4552,
+      "sha256": "1895ee1296033843e4450379d74c23f9260205373c1ec8f203cfe6cec7a2c18b"
+    },
+    {
+      "path": "docs/motion/llms.txt",
+      "source": {
+        "url": "https://motion.dev/llms.txt"
+      },
+      "bytes": 48145,
+      "sha256": "dac7333f03d1aa5c8655d3458b13db897a1b4fa4408403318d8a67dc3987ffd5"
+    },
+    {
+      "path": "docs/shadcn-svelte/llms.txt",
+      "source": {
+        "url": "https://www.shadcn-svelte.com/llms.txt"
+      },
+      "bytes": 11741,
+      "sha256": "d5af6c7f18600c8dd145ffce5986e88c111f95b7b79cb0546a8120360369aa5c"
+    },
+    {
+      "path": "docs/shadcn-svelte/skills.md",
+      "source": {
+        "url": "https://www.shadcn-svelte.com/docs/skills.md"
+      },
+      "bytes": 3277,
+      "sha256": "8584a047da6e99b804ab036260681dbac77758ab2f62fa547fbabab07d9a7245"
+    },
+    {
+      "path": "docs/shadcn-svelte/theming.md",
+      "source": {
+        "url": "https://www.shadcn-svelte.com/docs/theming.md"
+      },
+      "bytes": 18018,
+      "sha256": "c8b94c16bd34f13b1d7a803cc65fd72754f6e2bcce3c13f48673a1c1830ab60d"
+    },
+    {
+      "path": "docs/shadcn-svelte/dialog.md",
+      "source": {
+        "url": "https://www.shadcn-svelte.com/docs/components/dialog.md"
+      },
+      "bytes": 3832,
+      "sha256": "6437d11198a5dd9d5010b1bbf0713e71314f33ca21b6c5b04d9c06c1252a7d47"
+    },
+    {
+      "path": "docs/shadcn-svelte/tabs.md",
+      "source": {
+        "url": "https://www.shadcn-svelte.com/docs/components/tabs.md"
+      },
+      "bytes": 3364,
+      "sha256": "1bc57bb56bed62aa5dfe1b4f678b4bc46724d0ac188c261dca1c3fd3a1f43c26"
+    },
+    {
+      "path": "docs/shadcn-svelte/button.md",
+      "source": {
+        "url": "https://www.shadcn-svelte.com/docs/components/button.md"
+      },
+      "bytes": 13349,
+      "sha256": "6708c812cca62d3ce259b4451a2e78fb0748dd73034074eda396aeffdc43fe52"
+    },
+    {
+      "path": "docs/shadcn-react/llms.txt",
+      "source": {
+        "url": "https://ui.shadcn.com/llms.txt"
+      },
+      "bytes": 12260,
+      "sha256": "7abce6a2d2d3124d7140e9a684202e1e265d3b7727e2ca7e2bac15d5e214ec72"
+    },
+    {
+      "path": "docs/aceternity-react/llms.txt",
+      "source": {
+        "url": "https://ui.aceternity.com/llms.txt"
+      },
+      "bytes": 75282,
+      "sha256": "a9df7dfd5436a717711941337d4bb587c6109b8dd91e55fcad6357a85664c9ed"
+    },
+    {
+      "path": "licenses/shadcn-svelte-LICENSE.md",
+      "source": {
+        "url": "https://raw.githubusercontent.com/huntabyte/shadcn-svelte/cca0797342bb6cca361a97e61cfab90e68167c04/LICENSE.md"
+      },
+      "bytes": 1192,
+      "sha256": "230594c9dedb06fb0759381a520b449c1b47b0f63b95fc88ef9d7e851e2540a9"
+    },
+    {
+      "path": "licenses/shadcn-LICENSE.md",
+      "source": {
+        "url": "https://raw.githubusercontent.com/shadcn-ui/ui/a87a63b2ca25143d26c8bd0903e4e9bc77b3f824/LICENSE.md"
+      },
+      "bytes": 1063,
+      "sha256": "1564074e13439397221ffd522e2e504d56561994a23d371aa5e3ad43e4f5423f"
+    },
+    {
+      "path": "licenses/motion-ai-package.json",
+      "source": {
+        "npm_package": "motion-ai",
+        "version": "14.1.0",
+        "license": "MIT"
+      },
+      "bytes": 885,
+      "sha256": "b61b199a1f2c91af973cecae1ff62be5f69a2ed286df890a208212348298eb0e"
+    }
+  ],
+  "skills": [
+    {
+      "name": "motion",
+      "repository": "https://github.com/motiondivision/ai-kit",
+      "ref": "1140efe9ad5e03c689ea6bb19d9d3850a4dae5f7",
+      "source_path": "plugins/motion/skills/motion",
+      "destination": "/home/nightmare/.codex/skills/motion",
+      "active": true,
+      "license_file": null,
+      "files": [
+        {
+          "path": "SKILL.md",
+          "bytes": 4500,
+          "sha256": "e9e9b884afe14b07c3c71fe707a5fa2407b2d645c75686402927496dd7e596f3"
+        },
+        {
+          "path": "best-practices/base-ui.md",
+          "bytes": 2737,
+          "sha256": "cf1e79a446965c965a19a07e6c92527c8f661f87e0f16e321d4136fa7f1dd0de"
+        },
+        {
+          "path": "best-practices/index.md",
+          "bytes": 2670,
+          "sha256": "88f80af1af8e88c0eb9ad85ad70dd5f61c002c3a96055a05eeafc58bb2430bdf"
+        },
+        {
+          "path": "best-practices/motion.md",
+          "bytes": 947,
+          "sha256": "92dee7c7b3d39ed02956102fbc0c9790e4f45a11b80bd5846a8336871b555d8a"
+        },
+        {
+          "path": "best-practices/react.md",
+          "bytes": 2115,
+          "sha256": "bdfbe7810d96e0b6ebfe36db3823027b1cc011285f7e2f60f7ad26c08bf4337f"
+        },
+        {
+          "path": "best-practices/vue.md",
+          "bytes": 1354,
+          "sha256": "935e462042b5f02d086d680e757f29b5e0d3177781c3aab9cc3838eed88bd292"
+        },
+        {
+          "path": "codex/index.md",
+          "bytes": 6143,
+          "sha256": "590c1d3891019a501b77389dde78d9cb259e66bcb87746e5c7d06d8414fccaf6"
+        },
+        {
+          "path": "css-spring/index.md",
+          "bytes": 2545,
+          "sha256": "98ae2faa1c68b5d2527e1f6bb3d94a1fb0482d24099ad6f9c5cfcd3ebb430a85"
+        },
+        {
+          "path": "performance-audit/index.md",
+          "bytes": 1652,
+          "sha256": "90cd82c9c1e492d529e30bfe457498cd83cf8bfd235ca5b9f0789e425248cbd4"
+        },
+        {
+          "path": "transition-preview/index.md",
+          "bytes": 2240,
+          "sha256": "64962b3757518956e56599d31bea8f7bced604b4ab35a14e2e1cf3494aa87ace"
+        }
+      ]
+    },
+    {
+      "name": "shadcn-svelte",
+      "repository": "https://github.com/huntabyte/shadcn-svelte",
+      "ref": "cca0797342bb6cca361a97e61cfab90e68167c04",
+      "source_path": "skills/shadcn-svelte",
+      "destination": "/home/nightmare/.codex/skills/shadcn-svelte",
+      "active": true,
+      "license_file": "licenses/shadcn-svelte-LICENSE.md",
+      "files": [
+        {
+          "path": "LICENSE.md",
+          "bytes": 1192,
+          "sha256": "230594c9dedb06fb0759381a520b449c1b47b0f63b95fc88ef9d7e851e2540a9"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 14538,
+          "sha256": "7f56b359c4ea8d82dffbe5845d37bdfa147d0d0bcc8002ca8a65494ef9f87d70"
+        },
+        {
+          "path": "agents/openai.yml",
+          "bytes": 267,
+          "sha256": "031e9e3bdb879262a05e806b8f65eb6357144520fcbb82bf5d0ed3158e7833c8"
+        },
+        {
+          "path": "assets/shadcn-svelte-small.png",
+          "bytes": 2672,
+          "sha256": "ab571a7acd192a769531b5ea5e2105f40128b52e90fbdeb31e712d5fd18f6350"
+        },
+        {
+          "path": "assets/shadcn-svelte.png",
+          "bytes": 9410,
+          "sha256": "256a06954d29e566b01695f0fa3574c0a6d69991098e756d8cc0704ee376ce3f"
+        },
+        {
+          "path": "cli.md",
+          "bytes": 9935,
+          "sha256": "31957b96f85f388c9fa87aa1ad139e8ab79d775f37eb73c479a2fbc969be00a0"
+        },
+        {
+          "path": "customization.md",
+          "bytes": 6392,
+          "sha256": "8b9a4726468cd3352028eabacac718753f3aa281479a25a7d4c04f30f75d6c60"
+        },
+        {
+          "path": "evals/evals.json",
+          "bytes": 3065,
+          "sha256": "f3c29b8f34044f51e0d42d8711c418bb1cb17bf02e4f09d6d761f610b6553fe7"
+        },
+        {
+          "path": "rules/composition.md",
+          "bytes": 6533,
+          "sha256": "e14fe6271369db30706b859a3de6805eeba2c14d41920508633d2f7dcea93bd0"
+        },
+        {
+          "path": "rules/forms.md",
+          "bytes": 6337,
+          "sha256": "614363e74742e97acb775c8030d738635da230f8ccd8c5fa1d12171e68bfd318"
+        },
+        {
+          "path": "rules/icons.md",
+          "bytes": 2435,
+          "sha256": "cd291c6bf9b916b0e5d625eaf2ee1699e1dda4bbf7802a2c07ef18182a04d848"
+        },
+        {
+          "path": "rules/styling.md",
+          "bytes": 4458,
+          "sha256": "62d661d54f36f0188a123a7f0dd30ea20c37f6ca2843404f3eaa0ba1ac77f575"
+        }
+      ]
+    },
+    {
+      "name": "shadcn",
+      "repository": "https://github.com/shadcn-ui/ui",
+      "ref": "a87a63b2ca25143d26c8bd0903e4e9bc77b3f824",
+      "source_path": "skills/shadcn",
+      "destination": "/home/nightmare/Documents/GitHub/2idiotz/docs/research/ui-toolkit/reference-skills/shadcn",
+      "active": false,
+      "license_file": "licenses/shadcn-LICENSE.md",
+      "files": [
+        {
+          "path": "LICENSE.md",
+          "bytes": 1063,
+          "sha256": "1564074e13439397221ffd522e2e504d56561994a23d371aa5e3ad43e4f5423f"
+        },
+        {
+          "path": "SKILL.md",
+          "bytes": 19527,
+          "sha256": "deba6c5152d9835892fa7dffeb1fedbb689ddac7e59e14e57ec5eaf9463309e4"
+        },
+        {
+          "path": "agents/openai.yml",
+          "bytes": 238,
+          "sha256": "35db91b1eef58b2abe01da9b88577de5a44e233b740cd93d692ddeeadd2afe4d"
+        },
+        {
+          "path": "assets/shadcn-small.png",
+          "bytes": 1049,
+          "sha256": "0ecc62d682727f68fc4937eed19960c706714fa084d44f63028d611ae02bf3d7"
+        },
+        {
+          "path": "assets/shadcn.png",
+          "bytes": 3852,
+          "sha256": "7d60ad6fec4d89a0d44ba5a3c9283d2fea0047af5467f9227040e20d927d39b7"
+        },
+        {
+          "path": "cli.md",
+          "bytes": 17304,
+          "sha256": "a381e35bf36fe7bb851952c13707e01e82434fd7a4a4e53f6df26c6370838904"
+        },
+        {
+          "path": "customization.md",
+          "bytes": 6074,
+          "sha256": "84c1d47168c4b8adb5840e4af30a4e373ae3377c1110478c8974f398dd63f5ba"
+        },
+        {
+          "path": "evals/evals.json",
+          "bytes": 6330,
+          "sha256": "58aca2760b0cc5265bb575f76cd8eed344b88544314b8cb2cd53e0b8007dc936"
+        },
+        {
+          "path": "mcp.md",
+          "bytes": 3510,
+          "sha256": "8d696b4e45b7d0e337367248513bd9acebe8f3bcfd7b748c775e5a337c8f38c8"
+        },
+        {
+          "path": "registry.md",
+          "bytes": 8817,
+          "sha256": "4f239be36bd2b58e17047db1ca80ab7da00e15a8b73242e5e4d50d113c4caa05"
+        },
+        {
+          "path": "rules/base-vs-radix.md",
+          "bytes": 6954,
+          "sha256": "2b2deb47d004285220c1fc6b38bb2edc2d0ccbcdafd031b0b189d5d8ed0d1ba8"
+        },
+        {
+          "path": "rules/chat.md",
+          "bytes": 8018,
+          "sha256": "de29c12524a27578a59ecf8c95ea939278c1a3572a3706bfc99f6f92cb770b7b"
+        },
+        {
+          "path": "rules/composition.md",
+          "bytes": 4892,
+          "sha256": "f282df828d83a91132a846ddb62eea149a7c7c94822e9ca88cfddf85af01aa41"
+        },
+        {
+          "path": "rules/forms.md",
+          "bytes": 4857,
+          "sha256": "29593e14381e34626f8e0e9c15c59f3394b92a0623af6a6ec94585400123853c"
+        },
+        {
+          "path": "rules/icons.md",
+          "bytes": 1958,
+          "sha256": "d4a58266648872d9ee07d0c2368843a1cb88b8253b7f528dd7bda9d68b6c2535"
+        },
+        {
+          "path": "rules/styling.md",
+          "bytes": 4675,
+          "sha256": "f88fbd72dff862805b786dc7d7e4c74c83030fc278c5b97c993e4e665001798c"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "motion_mcp": {
+      "url": "https://mcp.motion.dev",
+      "server": {
+        "name": "motion",
+        "title": "Motion",
+        "version": "1.0.0"
+      },
+      "tools": [
+        "search-motion-docs"
+      ],
+      "search_verified": true,
+      "resources_read": 6
+    }
+  }
+}

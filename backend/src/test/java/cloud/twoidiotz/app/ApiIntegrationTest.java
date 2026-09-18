@@ -28,4 +28,23 @@ class ApiIntegrationTest {
     assertEquals("{\"status\":\"ok\"}", health.body());
     assertEquals("no-store", health.headers().firstValue("Cache-Control").orElseThrow());
   }
+
+  @Test
+  void servesFrontendAssetsThroughBackend() throws Exception {
+    var client = newHttpClient();
+    for (var asset :
+        new String[] {
+          "assets/brand/tda-logo.svg",
+          "assets/fonts/dosis-variable.ttf",
+          "stops-images/turingTerminal.png"
+        }) {
+      var response =
+          client.send(
+              HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/api/v1/" + asset))
+                  .build(),
+              HttpResponse.BodyHandlers.ofByteArray());
+      assertEquals(200, response.statusCode(), asset);
+      assertTrue(response.body().length > 0, asset);
+    }
+  }
 }
