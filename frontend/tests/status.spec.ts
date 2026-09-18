@@ -1,7 +1,9 @@
 import { createStop } from './fixtures/stops';
 import { mockBrandAssets } from './fixtures/assets';
 
-const featuredStop = createStop(42, { image_url: '/api/v1/stops-images/turingTerminal.png' });
+const featuredStop = createStop(42, {
+  image_url: 'http://127.0.0.1:3301/api/v1/stops-images/turingTerminal.png'
+});
 import { expect, test } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
 
